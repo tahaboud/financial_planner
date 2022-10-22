@@ -18,6 +18,7 @@ const Donut = () => {
     plotOptions: {
       pie: {
         donut: {
+          background: "#E2E2E2",
           labels: {
             show: true,
             name: { show: true },
@@ -29,7 +30,7 @@ const Donut = () => {
                 const total = w.globals.seriesTotals.reduce((a, b) => {
                   return a + b;
                 }, 0);
-                return numeral(total).format("0 a");
+                return "$ " + numeral(total).format("0 a");
               },
             },
           },
