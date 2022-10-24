@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import HSBar from "react-horizontal-stacked-bar-chart";
 
-const Description = () => {
+const Description = ({ setOpen }) => {
   const [series, setSeries] = useState([2000, 500, 1000, 1500]);
   const [labels, setLabels] = useState([
     "Travel",
@@ -138,6 +138,9 @@ const Description = () => {
               },
             }}
             endIcon={<ArrowForwardIcon />}
+            onClick={() => {
+              setOpen(true);
+            }}
           >
             Get recommended plan
           </Button>

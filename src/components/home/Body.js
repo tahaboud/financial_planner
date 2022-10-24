@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Description from "./Description";
 import Donut from "./Donut";
 
-const Body = () => {
+const Body = ({ setOpen }) => {
   return (
     <Box
       sx={{
@@ -15,7 +15,7 @@ const Body = () => {
       }}
     >
       <Donut />
-      <Description />
+      <Description setOpen={setOpen} />
     </Box>
   );
 };
