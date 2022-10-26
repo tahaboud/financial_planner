@@ -4,12 +4,38 @@ import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Typography } from "@mui/material";
-import { OutlinedInput } from "@mui/material";
+import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useNavigate } from "react-router-dom";
+import { recomendedPlan } from "../validation/recomendedPlanValidator";
+import { useState } from "react";
 
 const PlanDialog = ({ open, onClose, setOpen }) => {
+  const navigate = useNavigate();
+
+  const [numberOfKids, setNumberOfKids] = useState("");
+  const [age, setAge] = useState("");
+  const [monthlyEmis, setMonthlyEmis] = useState("");
+  const [retireAge, setRetireAge] = useState("");
+  const [errors, setErrors] = useState(null);
+
+  const onSubmit = () => {
+    const { isValid, validationErrors } = recomendedPlan({
+      numberOfKids,
+      age,
+      monthlyEmis,
+      retireAge,
+    });
+    if (isValid) {
+      setErrors(null);
+      navigate("/recomended");
+    } else {
+      setErrors(validationErrors);
+    }
+  };
+
   return (
     <Dialog
       open={open}
@@ -51,13 +77,46 @@ const PlanDialog = ({ open, onClose, setOpen }) => {
               color: "#1F1F1F",
             }}
           >
+            Your age:
+          </Typography>
+          <TextField
+            fullWidth
+            variant="outlined"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            InputProps={{
+              sx: {
+                borderRadius: "100px",
+              },
+            }}
+            error={errors && (errors.age ? true : false)}
+            helperText={errors && errors.age}
+            placeholder="Example: 20"
+            size="small"
+          />
+        </Box>
+        <Box sx={{ margin: "1em 0" }}>
+          <Typography
+            sx={{
+              fontFamily: "GilroyMedium",
+              fontSize: "15px",
+              color: "#1F1F1F",
+            }}
+          >
             Number of kids:
           </Typography>
-          <OutlinedInput
+          <TextField
             fullWidth
-            sx={{
-              borderRadius: "100px",
+            variant="outlined"
+            value={numberOfKids}
+            onChange={(e) => setNumberOfKids(e.target.value)}
+            InputProps={{
+              sx: {
+                borderRadius: "100px",
+              },
             }}
+            error={errors && (errors.numberOfKids ? true : false)}
+            helperText={errors && errors.numberOfKids}
             placeholder="Example: 4"
             size="small"
           />
@@ -72,11 +131,18 @@ const PlanDialog = ({ open, onClose, setOpen }) => {
           >
             {"Monthly emis ($):"}
           </Typography>
-          <OutlinedInput
+          <TextField
             fullWidth
-            sx={{
-              borderRadius: "100px",
+            variant="outlined"
+            value={monthlyEmis}
+            onChange={(e) => setMonthlyEmis(e.target.value)}
+            InputProps={{
+              sx: {
+                borderRadius: "100px",
+              },
             }}
+            error={errors && (errors.monthlyEmis ? true : false)}
+            helperText={errors && errors.monthlyEmis}
             placeholder="Example: 3000"
             size="small"
           />
@@ -92,10 +158,17 @@ const PlanDialog = ({ open, onClose, setOpen }) => {
             {"Plan to retire at:"}
           </Typography>
           <Box sx={{ display: "flex" }}>
-            <OutlinedInput
-              sx={{
-                borderRadius: "100px",
+            <TextField
+              InputProps={{
+                sx: {
+                  borderRadius: "100px",
+                },
               }}
+              error={errors && (errors.retireAge ? true : false)}
+              helperText={errors && errors.retireAge}
+              variant="outlined"
+              value={retireAge}
+              onChange={(e) => setRetireAge(e.target.value)}
               placeholder="Example: 60 y.o."
               size="small"
             />
@@ -146,6 +219,7 @@ const PlanDialog = ({ open, onClose, setOpen }) => {
             color: "#FC6B21",
             margin: "1em 0",
           }}
+          onClick={onSubmit}
         >
           Get recommended plan
         </Button>
