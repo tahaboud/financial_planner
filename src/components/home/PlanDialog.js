@@ -12,13 +12,13 @@ import { useNavigate } from "react-router-dom";
 import { recomendedPlan } from "../validation/recomendedPlanValidator";
 import { useState } from "react";
 
-const PlanDialog = ({ open, onClose, setOpen }) => {
+const PlanDialog = ({ open, onClose, setOpen, dataMap }) => {
   const navigate = useNavigate();
 
-  const [numberOfKids, setNumberOfKids] = useState("");
-  const [age, setAge] = useState("");
-  const [monthlyEmis, setMonthlyEmis] = useState("");
-  const [retireAge, setRetireAge] = useState("");
+  const [numberOfKids, setNumberOfKids] = useState("2");
+  const [age, setAge] = useState("30");
+  const [monthlyEmis, setMonthlyEmis] = useState("300");
+  const [retireAge, setRetireAge] = useState("50");
   const [errors, setErrors] = useState(null);
 
   const onSubmit = () => {
@@ -30,7 +30,9 @@ const PlanDialog = ({ open, onClose, setOpen }) => {
     });
     if (isValid) {
       setErrors(null);
-      navigate("/recomended");
+      navigate("/recomended", {
+        state: { numberOfKids, age, monthlyEmis, retireAge, dataMap },
+      });
     } else {
       setErrors(validationErrors);
     }

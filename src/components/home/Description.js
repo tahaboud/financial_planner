@@ -6,34 +6,40 @@ import { useState } from "react";
 import HSBar from "react-horizontal-stacked-bar-chart";
 import { DropzoneDialog } from "react-mui-dropzone";
 import { uploadExcelAndGetChartData } from "../../backend/server";
+import distinctColors from "distinct-colors";
 
-const Description = ({ setOpen }) => {
-  const [series, setSeries] = useState([2000, 500, 1000, 1500]);
+const Description = ({
+  setOpen,
+  series,
+  labels,
+  colors,
+  setSeries,
+  setLabels,
+  setColors,
+  setDataMap,
+}) => {
   const [dropZoneOpen, setDropZoneOpen] = useState(false);
-  const [labels, setLabels] = useState([
-    "Travel",
-    "Food",
-    "Shopping",
-    "Savings",
-  ]);
-  const [colors, setColors] = useState([
-    "#c05746",
-    "#adc698",
-    "#679948",
-    "#C2C2C2",
-    "#503047",
-  ]);
+  const [file, setFile] = useState(null);
   const total = series.reduce((a, b) => a + b);
   let seriesPercentage = [];
   series.map((value, index) =>
     seriesPercentage.push({
-      value: Math.ceil((value * 100) / total),
+      value: parseFloat(((value * 100) / total).toFixed(1)),
       color: colors[index],
-      description: Math.ceil((value * 100) / total) + " %",
+      description: ((value * 100) / total).toFixed(1) + " %",
     })
   );
   const onSave = async (files) => {
+    setFile(files[0]);
     const result = await uploadExcelAndGetChartData(files[0]);
+    setDataMap(result);
+    setSeries([...result.values()]);
+    setLabels([...result.keys()]);
+    const colo = distinctColors({ count: result.size });
+    colo.forEach((color, index) => {
+      colo[index] = color.css();
+    });
+    setColors(colo);
     setDropZoneOpen(false);
   };
   return (
@@ -88,39 +94,38 @@ const Description = ({ setOpen }) => {
           }}
         >
           <Box sx={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
-            <Box sx={{ display: "flex", gap: "2px" }}>
-              <CancelIcon sx={{ color: "#FC5339", cursor: "pointer" }} />
-              <Typography sx={{ fontFamily: "GilroyRegular" }}>
-                40% Travel
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: "2px" }}>
-              <CancelIcon sx={{ color: "#FC5339", cursor: "pointer" }} />
-              <Typography sx={{ fontFamily: "GilroyRegular" }}>
-                30% Food
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: "2px" }}>
-              <CancelIcon sx={{ color: "#FC5339", cursor: "pointer" }} />
-              <Typography sx={{ fontFamily: "GilroyRegular" }}>
-                20% Shopping
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: "2px" }}>
-              <CancelIcon sx={{ color: "#FC5339", cursor: "pointer" }} />
-              <Typography sx={{ fontFamily: "GilroyRegular" }}>
-                10% Savings
-              </Typography>
-            </Box>
+            {seriesPercentage.map((serie, index) => {
+              return (
+                <Box key={index} sx={{ display: "flex", gap: "2px" }}>
+                  <CancelIcon sx={{ color: "#FC5339", cursor: "pointer" }} />
+                  <Typography sx={{ fontFamily: "GilroyRegular" }}>
+                    {`${serie.value}% ${labels[index]}`}
+                  </Typography>
+                </Box>
+              );
+            })}
+
             <Box sx={{ display: "flex", cursor: "pointer" }}>
-              <AddIcon sx={{ color: "#FC5339" }} />
-              <Button
-                variant="text"
-                onClick={() => setDropZoneOpen(true)}
-                sx={{ color: "#FC5339", fontFamily: "GilroyMedium" }}
-              >
-                Add new bank transaction
-              </Button>
+              {file ? (
+                <Button
+                  variant="text"
+                  onClick={() => setDropZoneOpen(true)}
+                  sx={{ color: "#FC5339", fontFamily: "GilroyMedium" }}
+                >
+                  {file.name}
+                </Button>
+              ) : (
+                <>
+                  <AddIcon sx={{ color: "#FC5339" }} />
+                  <Button
+                    variant="text"
+                    onClick={() => setDropZoneOpen(true)}
+                    sx={{ color: "#FC5339", fontFamily: "GilroyMedium" }}
+                  >
+                    Add new bank transaction
+                  </Button>
+                </>
+              )}
             </Box>
           </Box>
           <Box sx={{ margin: "1em 0" }}>
@@ -129,7 +134,7 @@ const Description = ({ setOpen }) => {
               showTextIn
               fontColor="#ffffff"
               data={seriesPercentage}
-              outlineWidth={0.3}
+              outlineWidth={0.01}
               outlineColor="white"
             />
           </Box>

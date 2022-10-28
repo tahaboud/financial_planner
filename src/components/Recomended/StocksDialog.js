@@ -12,8 +12,33 @@ import mercado from "../../static/logos/mercado.png";
 import shopify from "../../static/logos/shopify.png";
 import intuitive from "../../static/logos/intuitive.svg";
 import realty from "../../static/logos/realty.svg";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const StocksDialog = ({ open, onClose, setOpen }) => {
+  const [shopifyPrice, setShopifyPrice] = useState(0);
+  const [mercadoPrice, setMercadoPrice] = useState(0);
+  const [intuitivePrice, setIntuitivePrice] = useState(0);
+  const [realtyPrice, setRealtyPrice] = useState(0);
+  const [ethereumPrice, setEthereumPrice] = useState(0);
+  const [bitcoinPrice, setBitcoinPrice] = useState(0);
+  useEffect(() => {
+    getPrices();
+  }, []);
+  const getPrices = async () => {
+    let price = await getStockValue("SHOP");
+    setShopifyPrice(price.data.data.currentPrice);
+    price = await getStockValue("MELI");
+    setMercadoPrice(price.data.data.currentPrice);
+    price = await getStockValue("ISRG");
+    setIntuitivePrice(price.data.data.currentPrice);
+    price = await getStockValue("O");
+    setRealtyPrice(price.data.data.currentPrice);
+    price = await getStockValue("BTC-USD");
+    setBitcoinPrice(price.data.data.dayHigh);
+    price = await getStockValue("ETH-USD");
+    setEthereumPrice(price.data.data.dayHigh);
+  };
   return (
     <Dialog
       open={open}
@@ -56,7 +81,7 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
         <Box sx={{ marginTop: "1em" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ height: "100%", width: "3em", margin: "0 1em 0 0" }}>
-              <img src={shopify} width="100%" height="90%" />
+              <img src={shopify} alt="Shopify logo" width="100%" height="90%" />
             </Box>
             <Typography
               sx={{
@@ -65,14 +90,19 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
                 margin: "1em 0",
               }}
             >
-              Shopify {"(NYSE:SHOP) $36 billion"}
+              Shopify {`(NYSE:SHOP) $${shopifyPrice}`}
             </Typography>
           </Box>
 
           <Divider />
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ height: "100%", width: "3em", margin: "0 1em 0 0" }}>
-              <img src={realty} width="100%" height="90%" />
+              <img
+                src={realty}
+                alt="Realty Income logo"
+                width="100%"
+                height="90%"
+              />
             </Box>
             <Typography
               sx={{
@@ -81,13 +111,18 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
                 margin: "1em 0",
               }}
             >
-              {"Realty Income (NYSE:O) $38 billion"}
+              {`Realty Income (NYSE:O) $${realtyPrice}`}
             </Typography>
           </Box>
           <Divider />
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ height: "100%", width: "3em", margin: "0 1em 0 0" }}>
-              <img src={mercado} width="100%" height="90%" />
+              <img
+                src={mercado}
+                alt="Mercado Libre logo"
+                width="100%"
+                height="90%"
+              />
             </Box>
             <Typography
               sx={{
@@ -96,13 +131,18 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
                 margin: "1em 0",
               }}
             >
-              {"MercadoLibre (NASDAQ:MELI) $40 billion"}
+              {`Mercado Libre (NASDAQ:MELI) $${mercadoPrice}`}
             </Typography>
           </Box>
           <Divider />
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ height: "100%", width: "3em", margin: "0 1em 0 0" }}>
-              <img src={intuitive} width="100%" height="90%" />
+              <img
+                src={intuitive}
+                alt="Intuitive Surgical logo"
+                width="100%"
+                height="90%"
+              />
             </Box>
             <Typography
               sx={{
@@ -111,13 +151,13 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
                 margin: "1em 0",
               }}
             >
-              {"Intuitive Surgical (NASDAQ:ISRG) $67 billion"}
+              {`Intuitive Surgical (NASDAQ:ISRG) $${intuitivePrice}`}
             </Typography>
           </Box>
           <Divider />
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ height: "100%", width: "3em", margin: "0 1em 0 0" }}>
-              <img src={bitcoin} width="100%" height="90%" />
+              <img src={bitcoin} alt="Bitcoin logo" width="100%" height="90%" />
             </Box>
             <Typography
               sx={{
@@ -126,13 +166,18 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
                 margin: "1em 0",
               }}
             >
-              Bitcoin
+              Bitcoin {`$${bitcoinPrice}`}
             </Typography>
           </Box>
           <Divider />
           <Box sx={{ display: "flex" }}>
             <Box sx={{ height: "100%", width: "3em", margin: "0 1em 0 0" }}>
-              <img src={ethereum} width="100%" height="100%" />
+              <img
+                src={ethereum}
+                alt="Ethereum logo"
+                width="100%"
+                height="100%"
+              />
             </Box>
             <Typography
               sx={{
@@ -141,7 +186,7 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
                 margin: "1em 0",
               }}
             >
-              Ethereum
+              Ethereum {`$${ethereumPrice}`}
             </Typography>
           </Box>
         </Box>
@@ -149,10 +194,11 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
       <DialogActions sx={{ display: "flex", justifyContent: "end" }}>
         <Button
           size="small"
-          variant="text"
+          variant="contained"
           sx={{
             fontFamily: "GilroyMedium",
-            color: "#FC6B21",
+            backgroundColor: "#FC6B21",
+            color: "#ffffff",
             margin: "1em 0",
           }}
           onClick={() => window.open("https://www.unifimoney.com/")}
@@ -162,6 +208,24 @@ const StocksDialog = ({ open, onClose, setOpen }) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+const getStockValue = async (symbol) => {
+  const encodedParams = new URLSearchParams();
+  encodedParams.append("symbol", symbol);
+
+  const options = {
+    method: "POST",
+    url: "https://yahoo-finance97.p.rapidapi.com/stock-info",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "X-RapidAPI-Key": "bc5bc5dc21mshba7ee209fe5f11ap1c05adjsn5acbb571a190",
+      "X-RapidAPI-Host": "yahoo-finance97.p.rapidapi.com",
+    },
+    data: encodedParams,
+  };
+  const response = await axios.request(options);
+  return response;
 };
 
 export default StocksDialog;
