@@ -9,7 +9,7 @@ export async function uploadExcelAndGetChartData(file) {
   //   sheets: ["Bank Transactions"],
   //   columnToKey: {
   //     A: "Category",
-  //     B: "Amount",
+  //     B: 1,
   //   },
   // });
   const f = await file.arrayBuffer();
@@ -43,6 +43,13 @@ export async function uploadExcelAndGetChartData(file) {
         dataMap.set("Savings", 0);
       }
       dataMap.set("Savings", dataMap.get("Savings") + row[1]);
+    } else if (row[0] && (row[0].includes("Gas") || row[0].includes("bill"))) {
+      if (!dataMap.has("Fuel")) {
+        dataMap.set("Fuel", 0);
+      }
+      dataMap.set("Fuel", dataMap.get("Fuel") + row[1]);
+    } else if (row[0] && row[0].includes("Salary")) {
+      dataMap.set("Salary", row[1]);
     }
     if (row[0] && !row[0].includes("Salary")) {
       totalExpenditure += row[1];
@@ -121,8 +128,18 @@ export function getRecommendedPlan(
     (salaryAmount * debtAllocationPercentage) / 100
   );
   recommendedDataMap.set("Salary", salaryAmount);
+  return getChartData(recommendedDataMap);
 }
 
-function getChartData() {
-  const chartData = new Object();
+function getChartData(recommendedDataMap) {
+  const chartDataList = [];
+  recommendedDataMap.forEach((value, key) => {
+    let chartObject = new Object();
+    chartObject["name"] = key;
+    chartObject["value"] = value;
+    chartObject["percentage"] =
+      (value * 100) / recommendedDataMap.get("Salary");
+    chartDataList.push(chartObject);
+  });
+  return chartDataList;
 }
