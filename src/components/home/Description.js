@@ -32,14 +32,10 @@ const Description = ({
   const onSave = async (files) => {
     setFile(files[0]);
     const result = await uploadExcelAndGetChartData(files[0]);
-    setDataMap(result);
+    setDataMap(new Map(result));
+    result.delete("Salary");
     setSeries([...result.values()]);
     setLabels([...result.keys()]);
-    const colo = distinctColors({ count: result.size });
-    colo.forEach((color, index) => {
-      colo[index] = color.css();
-    });
-    setColors(colo);
     setDropZoneOpen(false);
   };
   return (
