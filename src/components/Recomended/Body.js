@@ -43,17 +43,16 @@ const Body = ({ setOpen }) => {
   ]);
   useEffect(() => {
     if (result) {
-      setSeries([]);
-      setLabels([]);
-      const colo = distinctColors({ count: result.length });
-      colo.forEach((color, index) => {
-        colo[index] = color.css();
-      });
-      setColors(colo);
+      let new_series = [];
+      let new_labels = [];
       result.map((r) => {
-        setSeries([...series, r.value]);
-        setLabels([...labels, r.name]);
+        if (r.name !== "Salary") {
+          new_series.push(r.value);
+          new_labels.push(r.name);
+        }
       });
+      setSeries(new_series);
+      setLabels(new_labels);
     }
   }, [result]);
   return (
