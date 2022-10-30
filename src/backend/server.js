@@ -71,12 +71,12 @@ export function getRecommendedPlan(
   const equityAllocationPercentage =
     savingsAllocationPercentage * ((100 - age) / 100);
   const cryptoAllocationPercentage =
-    savingsAllocationPercentage *
-    (100 - equityAllocationPercentage) *
+    
+    ((savingsAllocationPercentage - equityAllocationPercentage)) *
     (50 / 100);
   const debtAllocationPercentage =
-    savingsAllocationPercentage *
-    (100 - equityAllocationPercentage) *
+    
+    ((savingsAllocationPercentage - equityAllocationPercentage)) *
     (50 / 100);
 
   let needCategories = ["Food", "Fuel"];
@@ -84,18 +84,19 @@ export function getRecommendedPlan(
   let savingsCategories = ["Equity", "Crypto", "Debt"];
 
   let salaryAmount = dataMap.get("Salary");
+  console.log("salaryAmount : " + salaryAmount);
   const recommendedDataMap = new Map();
   recommendedDataMap.set(
     needCategories[0],
     Math.min(
-      dataMap.get(needCategories[0]),
+      20000,
       salaryAmount * (needAllocationPercentage / 100) * (60 / 100)
     )
   );
   recommendedDataMap.set(
     needCategories[1],
     Math.min(
-      dataMap.get(needCategories[1]),
+        20000,
       salaryAmount * (needAllocationPercentage / 100) * (40 / 100)
     )
   );
@@ -103,14 +104,14 @@ export function getRecommendedPlan(
   recommendedDataMap.set(
     wantCategories[0],
     Math.min(
-      dataMap.get(wantCategories[0]),
+        20000,
       salaryAmount * (wantAllocationPercentage / 100) * (50 / 100)
     )
   );
   recommendedDataMap.set(
     wantCategories[1],
     Math.min(
-      dataMap.get(wantCategories[1]),
+        20000,
       salaryAmount * (wantAllocationPercentage / 100) * (50 / 100)
     )
   );

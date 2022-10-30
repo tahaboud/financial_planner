@@ -75,7 +75,7 @@ const Description = ({
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography sx={{ fontFamily: "GilroyRegular", fontSize: "25px" }}>
-          Check out the top stoks NYSE!
+          We can get highest returns on your savings!
         </Typography>
         <Button
           variant="outlined"
@@ -95,7 +95,7 @@ const Description = ({
             setOpen(true);
           }}
         >
-          Top stocks in NYSE
+          Recommended Savings Plan
         </Button>
       </Box>
     </Box>

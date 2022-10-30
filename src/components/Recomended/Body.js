@@ -43,6 +43,7 @@ const Body = ({ setOpen }) => {
   ]);
   useEffect(() => {
     if (result) {
+      //console.log("result : " + )
       let new_series = [];
       let new_labels = [];
       result.map((r) => {
