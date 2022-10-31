@@ -60,9 +60,9 @@ export async function uploadExcelAndGetChartData(file) {
 
 export function getRecommendedPlan(
   dataMap,
-  monthlyEMI,
+  lifeExpectancy,
   ageToRetire,
-  numberOfKids,
+  monthlyExpenses,
   age
 ) {
   const needAllocationPercentage = 50;
@@ -129,6 +129,10 @@ export function getRecommendedPlan(
     (salaryAmount * debtAllocationPercentage) / 100
   );
   recommendedDataMap.set("Salary", salaryAmount);
+  recommendedDataMap.set("Retirement Corpus", 1300000);
+  recommendedDataMap.set("Monthly Savings", 1100);
+  recommendedDataMap.set("Monthly Expenses at Retirement age", 20000);
+  recommendedDataMap.set("Information", "Inflation Rate is considered as 6%. ROI is considered as 8%.")
   return getChartData(recommendedDataMap);
 }
 
