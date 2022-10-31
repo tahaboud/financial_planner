@@ -71,20 +71,15 @@ export function getRecommendedPlan(
   const equityAllocationPercentage =
     savingsAllocationPercentage * ((100 - age) / 100);
   const cryptoAllocationPercentage =
-    
-    ((savingsAllocationPercentage - equityAllocationPercentage)) *
-    (50 / 100);
+    (savingsAllocationPercentage - equityAllocationPercentage) * (50 / 100);
   const debtAllocationPercentage =
-    
-    ((savingsAllocationPercentage - equityAllocationPercentage)) *
-    (50 / 100);
+    (savingsAllocationPercentage - equityAllocationPercentage) * (50 / 100);
 
   let needCategories = ["Food", "Fuel"];
   let wantCategories = ["Travel", "Shopping"];
   let savingsCategories = ["Equity", "Crypto", "Debt"];
 
   let salaryAmount = dataMap.get("Salary");
-  console.log("salaryAmount : " + salaryAmount);
   const recommendedDataMap = new Map();
   recommendedDataMap.set(
     needCategories[0],
@@ -96,7 +91,7 @@ export function getRecommendedPlan(
   recommendedDataMap.set(
     needCategories[1],
     Math.min(
-        20000,
+      20000,
       salaryAmount * (needAllocationPercentage / 100) * (40 / 100)
     )
   );
@@ -104,14 +99,14 @@ export function getRecommendedPlan(
   recommendedDataMap.set(
     wantCategories[0],
     Math.min(
-        20000,
+      20000,
       salaryAmount * (wantAllocationPercentage / 100) * (50 / 100)
     )
   );
   recommendedDataMap.set(
     wantCategories[1],
     Math.min(
-        20000,
+      20000,
       salaryAmount * (wantAllocationPercentage / 100) * (50 / 100)
     )
   );
@@ -132,7 +127,10 @@ export function getRecommendedPlan(
   recommendedDataMap.set("Retirement Corpus", 1300000);
   recommendedDataMap.set("Monthly Savings", 1100);
   recommendedDataMap.set("Monthly Expenses at Retirement age", 20000);
-  recommendedDataMap.set("Information", "Inflation Rate is considered as 6%. ROI is considered as 8%.")
+  recommendedDataMap.set(
+    "Information",
+    "Inflation Rate is considered as 6%. ROI is considered as 8%."
+  );
   return getChartData(recommendedDataMap);
 }
 

@@ -4,7 +4,6 @@ import Chart from "react-apexcharts";
 import numeral from "numeral";
 
 const Donut = ({ series, labels, colors }) => {
-  console.log(labels);
   useEffect(() => {
     setOptions({
       labels: labels,

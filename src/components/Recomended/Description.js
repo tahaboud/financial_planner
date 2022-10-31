@@ -8,6 +8,8 @@ const Description = ({
   series,
   labels,
   colors,
+  firstLevelData,
+  information,
   setLabels,
   setSeries,
   setColors,
@@ -23,6 +25,36 @@ const Description = ({
   );
   return (
     <Box sx={{ width: "100%" }}>
+      <Box
+        sx={{
+          border: "1.3px solid #E2E2E2",
+          borderRadius: "10px",
+          padding: "1em",
+          margin: "1em 0",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            gap: "1em",
+            flexWrap: "wrap",
+            flexDirection: "column",
+          }}
+        >
+          <Typography>
+            <Typography component={"span"} sx={{ fontWeight: "bold" }}>
+              {firstLevelData[0] && firstLevelData[0].name}:
+            </Typography>{" "}
+            {firstLevelData[0] && firstLevelData[0].value} $
+          </Typography>
+          <Typography>
+            <Typography component={"span"} sx={{ fontWeight: "bold" }}>
+              {firstLevelData[1] && firstLevelData[1].name}:
+            </Typography>{" "}
+            {firstLevelData[1] && firstLevelData[1].value} $
+          </Typography>
+        </Box>
+      </Box>
       <Box sx={{ display: "flex", gap: "1em" }}>
         <Typography sx={{ fontFamily: "GilroyRegular", fontSize: "25px" }}>
           <Typography
@@ -71,6 +103,30 @@ const Description = ({
             outlineWidth={0.01}
             outlineColor="white"
           />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          border: "1.3px solid #E2E2E2",
+          borderRadius: "10px",
+          padding: "1em",
+          margin: "1em 0",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            gap: "1em",
+            flexWrap: "wrap",
+            flexDirection: "column",
+          }}
+        >
+          <Typography>
+            <Typography component={"span"} sx={{ fontWeight: "bold" }}>
+              {information[0] && information[0].name}:
+            </Typography>{" "}
+            {information[0] && information[0].value}
+          </Typography>
         </Box>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>

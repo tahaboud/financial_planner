@@ -21,7 +21,8 @@ const Body = ({ setOpen }) => {
       );
     }
   }, []);
-
+  const [firstLevelData, setFirstLevelData] = useState("");
+  const [information, setInformation] = useState("");
   const [series, setSeries] = useState([750, 1500, 500, 750, 1000, 400, 100]);
   const [labels, setLabels] = useState([
     "Travel",
@@ -43,17 +44,32 @@ const Body = ({ setOpen }) => {
   ]);
   useEffect(() => {
     if (result) {
-      //console.log("result : " + )
       let new_series = [];
       let new_labels = [];
+      let new_data = [];
+      let new_information = [];
       result.map((r) => {
-        if (r.name !== "Salary") {
+        if (
+          r.name !== "Salary" &&
+          r.name !== "Information" &&
+          r.name !== "Retirement Corpus" &&
+          r.name !== "Monthly Expenses at Retirement age"
+        ) {
           new_series.push(r.value);
           new_labels.push(r.name);
+        } else if (
+          r.name === "Retirement Corpus" ||
+          r.name === "Monthly Expenses at Retirement age"
+        ) {
+          new_data.push(r);
+        } else if (r.name === "Information") {
+          new_information.push(r);
         }
       });
       setSeries(new_series);
       setLabels(new_labels);
+      setFirstLevelData(new_data);
+      setInformation(new_information);
     }
   }, [result]);
   return (
@@ -76,6 +92,8 @@ const Body = ({ setOpen }) => {
         setLabels={setLabels}
         colors={colors}
         setColors={setColors}
+        firstLevelData={firstLevelData}
+        information={information}
       />
     </Box>
   );
